@@ -1,24 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import CardRender from "./components/CardRender/CardRender";
+import Buttons from "./components/Buttons/Buttons";
+
+import { useEffect, Fragment, useCallback } from "react";
+import axios from "axios"
+import {userActions} from "./store/store"
+import { useDispatch, useSelector } from "react-redux";
 
 function App() {
+
+  const dispatch = useDispatch();
+  const showUser = useSelector(state => state.user.users)
+
+  const getUsers = useCallback(() => {
+    axios.get("https://reqres.in/api/users?page=2")
+    .then(res => {
+      console.log(res.data.data);
+      const availableUser = res.data.data
+      dispatch(userActions.addUser(availableUser))
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }, [dispatch])
+
+  useEffect(() => {
+    getUsers()
+  }, [getUsers])
+
+  console.log(showUser);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <CardRender />
+      <Buttons />
+    </Fragment>
   );
 }
 

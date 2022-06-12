@@ -11,4 +11,11 @@
 .btn:hover {
     background: rgb(102, 100, 100);
     color: #fff;
+    transform: translateY(-1.5px);
+    transition: transform .2s;
+}
+
+.btn:active {
+    transform: translateY(0);
+    transition: transform .2s;
 }
